@@ -1,2 +1,2 @@
 # Machine-Learning-using-R
-Optical Character recognition using SVM
+Some Machine learning algorithms using R programming.
