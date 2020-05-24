@@ -1,0 +1,57 @@
+---
+title: "Digit Classification using SVM"
+author: "Gowrisankar JG"
+date: "24/05/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Loading the dataset
+```{r}
+letters <- read.csv("letterdata.csv")
+str(letters)
+```
+
+Dividing data into training and test set
+```{r}
+letters_train <- letters[1:16000,]
+letters_test <- letters[16001:20000,]
+```
+
+## Training a model
+Kernel specifies a non-linear mapping such as :  
+"rbfdot" = radial basis  
+"polydot" = polynomial  
+"tanhdot" = hyperbolic tangent sigmoid  
+"vanilladot" = linear  
+```{r}
+require(kernlab)
+letter_classifier <- ksvm(letter ~ ., data = letters_train, kernel = "vanilladot")
+
+letter_classifier
+```
+
+Evaluating model performance
+```{r}
+letter_predict <- predict(letter_classifier, letters_test)
+head(letter_predict)
+```
+
+Checking the number of letters correctly predicted
+```{r}
+match = letter_predict==letters_test$letter
+prop.table(table(match))
+```
+
+## Improving model performance
+
+Checking the Gaussian RBF kernel performance
+```{r}
+letter_rbf = ksvm(letter~., data = letters_train, kernel = "rbfdot", C = 100)
+letter_rbf_predict = predict(letter_rbf, letters_test)
+match = letter_rbf_predict == letters_test$letter
+prop.table(table(match))
+```
